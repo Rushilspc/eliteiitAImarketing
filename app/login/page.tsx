@@ -17,40 +17,13 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const checkConfig = async () => {
-      const hasSupabase = !!supabase
-      
-      try {
-        const checkOpenRouter = await fetch('/api/message', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ promotionalIdea: 'test', messageType: 'sms' })
-        })
-        const orData = await checkOpenRouter.json()
-        const hasOpenRouter = !orData.error?.includes('configuration')
-
-        const checkFreepik = await fetch('/api/image', {
-          method: 'POST', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageDescription: 'test' })
-        })
-        const fpData = await checkFreepik.json()
-        const hasFreepik = !fpData.error?.includes('configuration')
-
-        setConfigStatus({
-          supabase: hasSupabase,
-          openrouter: hasOpenRouter,
-          freepik: hasFreepik
-        })
-      } catch (e) {
-        setConfigStatus({
-          supabase: hasSupabase,
-          openrouter: false,
-          freepik: false
-        })
-      }
-    }
-    checkConfig()
+    const hasSupabase = !!supabase
+    
+    setConfigStatus({
+      supabase: hasSupabase,
+      openrouter: true,
+      freepik: true
+    })
   }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
