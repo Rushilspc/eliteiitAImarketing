@@ -1,0 +1,102 @@
+Build a modern, production-ready, full-stack SaaS web app tailored for Vercel's free hosting platform. The website should be branded for the client ELITEIIT (an education provider). Use a primarily white design with blue as secondary, but do NOT use conventional AI-site styles; choose clean, modern, and distinct font styles (avoid Roboto; prefer Nunito, Montserrat, or similar). The UI must be uncluttered, easy for marketers and teachers to use.
+
+Features:
+
+AI Message Creator (Frontend + Backend):
+
+Tool for generating promotional WhatsApp/SMS marketing messages with LLM (OpenRouter/meta-llama/llama-3.3-8b-instruct:free).
+
+Input box for campaign ideas (e.g. “20% off all courses for Diwali”).
+
+Dropdown/select for target platform (WhatsApp/SMS/Interakt).
+
+On submit, calls backend API which:
+
+Sends user idea and marketing context to OpenRouter Llama endpoint.
+
+Formats response for selected platform, clearly marked for 'Interakt'.
+
+Displays generated message and “Copy” button.
+
+Backend can use Replit’s serverless .js file, Vercel’s api/message.js route, or similar.
+
+AI Image Generator (Frontend + Backend):
+
+Input for marketing image idea (e.g. “5th grade students in math class”).
+
+On submit:
+
+Sends image concept to OpenRouter Llama model, refines it to a prompt.
+
+Shows the refined prompt on the page.
+
+Sends prompt to Freepik’s AI image API: https://api.freepik.com/v1/ai/text-to-image/imagen3 (call with fetch/Axios, handle auth).
+
+Displays generated image preview.
+
+Button for “Download Image” (downloads given image).
+
+Shows the refined prompt, with two buttons “Open in ChatGPT” and “Open in Gemini”; clicking these redirects the user with prompt text pre-filled for image generation on ChatGPT or Gemini.
+
+User Authentication (Supabase):
+
+Login page with email and password fields.
+
+Integrate Supabase authentication using provided Supabase URL and key.
+
+On login, show dashboard with authenticated user email.
+
+No registration or user management required outside login/authenticate/logout.
+
+No database needed for storing messages or images.
+
+Other Requirements:
+
+No persistent database besides Supabase auth.
+
+App should be designed for instant deployment in Vercel: correct Next.js/React folder structure, /api serverless routes; all keys/envs read via Vercel environment variables.
+
+Responsive, mobile-friendly.
+
+All styling by CSS modules, Tailwind, or styled-components if possible.
+
+Clear separation of frontend (React UI/Next.js pages) and backend (API routes for LLM, Freepik calls).
+
+Instructions:
+
+Start with Vercel-ready Next.js project template (npx create-next-app@latest).
+
+Implement all backend features as /api serverless Vercel routes (/api/message.js and /api/image.js).
+
+Ensure Supabase integration is using environment variables for URL and key.
+
+Confirm Freepik API and OpenRouter endpoints are configurable via environment variables.
+
+All fetch/request calls with error handling and status/loading indicators.
+
+Clearly mark actionable buttons (Copy, Download, Open in ChatGPT/Gemini).
+
+Use only free-tier features of all APIs/services.
+
+Output full source code with all dependencies, so it can be pushed to GitHub and deployed directly on Vercel without modification.
+
+Do NOT include any hard-coded secrets or keys.
+
+Style Guidance:
+
+Primary: white, Secondary: blue (#2563eb or similar).
+
+Use Nunito or Montserrat font.
+
+Avoid generic gradient backgrounds or illustrations.
+
+Minimal, clear, modern layout.
+
+Output Required:
+
+Complete Vercel-ready project.
+
+All code files validated.
+
+Instructions for connecting GitHub and deploying on Vercel.
+
