@@ -104,7 +104,7 @@ Output only the final enhanced prompt.`
       body: JSON.stringify({
         prompt: enhancedPrompt,
         num_images: 1,
-        aspect_ratio: 'landscape_4_3'
+        aspect_ratio: 'classic_4_3'
       }),
     })
 
