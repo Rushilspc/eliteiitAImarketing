@@ -9,6 +9,7 @@ export default function ImageGenerator() {
   const [enhancedPrompt, setEnhancedPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [copied, setCopied] = useState(false)
 
   const handleGenerate = async () => {
     if (!idea.trim()) {
@@ -59,6 +60,16 @@ export default function ImageGenerator() {
     window.open(url, '_blank')
   }
 
+  const copyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(enhancedPrompt)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -96,7 +107,15 @@ export default function ImageGenerator() {
         {enhancedPrompt && (
           <div className="mt-6 space-y-4">
             <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-              <p className="text-sm font-medium text-gray-700 mb-2">Enhanced Prompt:</p>
+              <div className="flex justify-between items-start mb-2">
+                <p className="text-sm font-medium text-gray-700">Enhanced Prompt:</p>
+                <button
+                  onClick={copyPrompt}
+                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                >
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
               <p className="text-gray-900 text-sm">{enhancedPrompt}</p>
             </div>
 
