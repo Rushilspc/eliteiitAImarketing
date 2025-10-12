@@ -94,7 +94,7 @@ Output only the final enhanced prompt.`
 
     const enhancedPrompt = enhanceData.choices[0]?.message?.content || imageDescription
 
-    // Step 2: Generate image using Freepik API
+    // Step 2: Generate image using Freepik API (async task pattern)
     const freepikResponse = await fetch('https://api.freepik.com/v1/ai/text-to-image/imagen3', {
       method: 'POST',
       headers: {
@@ -116,9 +116,47 @@ Output only the final enhanced prompt.`
       throw new Error(freepikData.error?.message || 'Failed to generate image')
     }
 
+    const taskId = freepikData.task_id
+    
+    if (!taskId) {
+      throw new Error('No task ID returned from Freepik')
+    }
+
+    // Step 3: Poll for the result
+    let imageUrl = ''
+    let attempts = 0
+    const maxAttempts = 30
+    
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Wait 2 seconds between polls
+      
+      const statusResponse = await fetch(`https://api.freepik.com/v1/ai/text-to-image/imagen3/${taskId}`, {
+        headers: {
+          'x-freepik-api-key': process.env.FREEPIK_API_KEY || '',
+        }
+      })
+      
+      const statusData = await statusResponse.json()
+      
+      if (statusData.task_status === 'COMPLETED' && statusData.generated && statusData.generated.length > 0) {
+        imageUrl = statusData.generated[0]?.url || statusData.generated[0]?.base64 || ''
+        break
+      }
+      
+      if (statusData.task_status === 'FAILED') {
+        throw new Error('Image generation failed')
+      }
+      
+      attempts++
+    }
+    
+    if (!imageUrl) {
+      throw new Error('Image generation timed out')
+    }
+
     return NextResponse.json({ 
       enhancedPrompt,
-      imageUrl: freepikData.data[0]?.base64 || freepikData.data[0]?.url || '',
+      imageUrl,
       originalIdea: imageDescription
     })
   } catch (error: any) {

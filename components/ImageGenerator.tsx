@@ -62,13 +62,24 @@ export default function ImageGenerator() {
     window.open(url, '_blank')
   }
 
-  const downloadImage = () => {
-    if (imageUrl.startsWith('data:')) {
-      const link = document.createElement('a')
-      link.href = imageUrl
-      link.download = 'eliteiit-marketing-image.png'
-      link.click()
-    } else {
+  const downloadImage = async () => {
+    try {
+      if (imageUrl.startsWith('data:')) {
+        const link = document.createElement('a')
+        link.href = imageUrl
+        link.download = 'eliteiit-marketing-image.png'
+        link.click()
+      } else {
+        const response = await fetch(imageUrl)
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'eliteiit-marketing-image.png'
+        link.click()
+        window.URL.revokeObjectURL(url)
+      }
+    } catch (err) {
       window.open(imageUrl, '_blank')
     }
   }
