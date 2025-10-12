@@ -7,7 +7,6 @@ import { supabase } from '@/lib/supabase'
 export default function ImageGenerator() {
   const [idea, setIdea] = useState('')
   const [enhancedPrompt, setEnhancedPrompt] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,7 +19,6 @@ export default function ImageGenerator() {
     setLoading(true)
     setError('')
     setEnhancedPrompt('')
-    setImageUrl('')
 
     try {
       if (!supabase) {
@@ -44,9 +42,8 @@ export default function ImageGenerator() {
       })
 
       setEnhancedPrompt(response.data.enhancedPrompt)
-      setImageUrl(response.data.imageUrl)
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to generate image')
+      setError(err.response?.data?.error || 'Failed to enhance prompt')
     } finally {
       setLoading(false)
     }
@@ -62,32 +59,11 @@ export default function ImageGenerator() {
     window.open(url, '_blank')
   }
 
-  const downloadImage = async () => {
-    try {
-      if (imageUrl.startsWith('data:')) {
-        const link = document.createElement('a')
-        link.href = imageUrl
-        link.download = 'eliteiit-marketing-image.png'
-        link.click()
-      } else {
-        const response = await fetch(imageUrl)
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = 'eliteiit-marketing-image.png'
-        link.click()
-        window.URL.revokeObjectURL(url)
-      }
-    } catch (err) {
-      window.open(imageUrl, '_blank')
-    }
-  }
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-      <h2 className="text-2xl font-bold text-gray-900 mb-4">AI Image Generator</h2>
-      <p className="text-gray-600 mb-6">Create marketing images with AI-enhanced prompts</p>
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">AI Image Prompt Generator</h2>
+      <p className="text-gray-600 mb-6">Create AI-enhanced prompts for image generation</p>
 
       <div className="space-y-4">
         <div>
@@ -108,7 +84,7 @@ export default function ImageGenerator() {
           disabled={loading}
           className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
         >
-          {loading ? 'Generating...' : 'Generate Image'}
+          {loading ? 'Enhancing Prompt...' : 'Generate Enhanced Prompt'}
         </button>
 
         {error && (
@@ -138,24 +114,6 @@ export default function ImageGenerator() {
                 Open in Gemini
               </button>
             </div>
-          </div>
-        )}
-
-        {imageUrl && (
-          <div className="mt-4 space-y-3">
-            <div className="border border-gray-200 rounded-md overflow-hidden">
-              <img 
-                src={imageUrl} 
-                alt="Generated marketing image" 
-                className="w-full h-auto"
-              />
-            </div>
-            <button
-              onClick={downloadImage}
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 font-medium"
-            >
-              Download Image
-            </button>
           </div>
         )}
       </div>
