@@ -1,36 +1,157 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ELITEIIT Marketing Tools
 
-## Getting Started
+A modern, production-ready SaaS web application for ELITEIIT Coaching Institute. This app provides AI-powered marketing tools including message generation and image creation.
 
-First, run the development server:
+## Features
 
+- **AI Message Creator**: Generate WhatsApp/SMS marketing messages using OpenRouter's Llama model
+- **AI Image Generator**: Create marketing images using Freepik's API with enhanced prompts
+- **Supabase Authentication**: Secure login system for authorized users
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes (Serverless)
+- **Authentication**: Supabase
+- **AI Services**: OpenRouter (Llama 3.3), Freepik API
+- **Deployment**: Vercel
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js 18+ installed
+- Supabase account and project
+- OpenRouter API key
+- Freepik API key
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd eliteiit-marketing-tools
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file in the root directory with:
 
-## Learn More
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
-To learn more about Next.js, take a look at the following resources:
+# OpenRouter API (for LLM)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Freepik API (for Image Generation)
+FREEPIK_API_KEY=your_freepik_api_key_here
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Run the development server:
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Method 1: Using Vercel Dashboard
+
+1. Push your code to GitHub
+2. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+3. Click "Import Project"
+4. Select your GitHub repository
+5. Configure environment variables in the Vercel dashboard:
+   - Add all variables from `.env.local`
+6. Click "Deploy"
+
+### Method 2: Using Vercel CLI
+
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
+
+2. Login to Vercel:
+```bash
+vercel login
+```
+
+3. Deploy:
+```bash
+vercel
+```
+
+4. Add environment variables:
+```bash
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+vercel env add OPENROUTER_API_KEY
+vercel env add FREEPIK_API_KEY
+```
+
+5. Deploy to production:
+```bash
+vercel --prod
+```
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Yes |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | Yes |
+| `OPENROUTER_API_KEY` | OpenRouter API key for LLM | Yes |
+| `FREEPIK_API_KEY` | Freepik API key for image generation | Yes |
+
+## Usage
+
+1. **Login**: Use your Supabase credentials to login
+2. **Message Creator**: 
+   - Enter your campaign idea
+   - Select platform (WhatsApp/SMS/Interakt)
+   - Click "Generate Message"
+   - Copy the generated message
+3. **Image Generator**:
+   - Enter your image idea
+   - Click "Generate Image"
+   - View enhanced prompt and generated image
+   - Download image or open in ChatGPT/Gemini
+
+## Project Structure
+
+```
+├── app/
+│   ├── api/
+│   │   ├── message/route.ts    # Message generation API
+│   │   └── image/route.ts      # Image generation API
+│   ├── dashboard/page.tsx      # Main dashboard
+│   ├── login/page.tsx          # Login page
+│   ├── layout.tsx              # Root layout
+│   └── page.tsx                # Home page (redirects to login)
+├── components/
+│   ├── MessageCreator.tsx      # Message creator component
+│   └── ImageGenerator.tsx      # Image generator component
+├── lib/
+│   └── supabase.ts             # Supabase client
+└── .env.example                # Environment variables template
+```
+
+## Branding
+
+- **Primary Color**: White (#ffffff)
+- **Secondary Color**: Blue (#2563eb)
+- **Font**: Nunito (clean, modern, non-AI style)
+- **Design**: Minimal, uncluttered, professional
+
+## License
+
+Proprietary - ELITEIIT Coaching Institute
