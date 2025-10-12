@@ -104,22 +104,21 @@ Output only the final enhanced prompt.`
       body: JSON.stringify({
         prompt: enhancedPrompt,
         num_images: 1,
-        image: {
-          size: 'landscape_4_3'
-        }
+        aspect_ratio: 'landscape_4_3'
       }),
     })
 
     const freepikData = await freepikResponse.json()
     
     if (!freepikResponse.ok) {
-      throw new Error(freepikData.error?.message || 'Failed to generate image')
+      const errorMsg = freepikData.error?.message || freepikData.message || JSON.stringify(freepikData)
+      throw new Error(`Freepik API error: ${errorMsg}`)
     }
 
     const taskId = freepikData.task_id
     
     if (!taskId) {
-      throw new Error('No task ID returned from Freepik')
+      throw new Error(`No task ID returned from Freepik. Response: ${JSON.stringify(freepikData)}`)
     }
 
     // Step 3: Poll for the result
