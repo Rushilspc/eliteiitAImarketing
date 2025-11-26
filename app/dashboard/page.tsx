@@ -1,50 +1,28 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { isAuthenticated, getUserEmail, logout } from '@/lib/auth'
 import MessageCreator from '@/components/MessageCreator'
 import ImageGenerator from '@/components/ImageGenerator'
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    const checkUser = async () => {
-      if (!supabase) {
-        router.push('/login')
-        return
-      }
-
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        router.push('/login')
-      } else {
-        setUser(session.user)
-        setLoading(false)
-      }
-    }
-
-    checkUser()
-
-    if (!supabase) return
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((event: string, session: any) => {
-      if (event === 'SIGNED_OUT') {
-        router.push('/login')
-      }
-    })
-
-    return () => {
-      authListener?.subscription?.unsubscribe()
+    if (!isAuthenticated()) {
+      router.push('/login')
+    } else {
+      setUserEmail(getUserEmail())
+      setLoading(false)
     }
   }, [router])
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
+  const handleLogout = () => {
+    logout()
+    router.push('/login')
   }
 
   if (loading) {
@@ -62,7 +40,7 @@ export default function Dashboard() {
           <div className="flex justify-between h-16 items-center">
             <h1 className="text-2xl font-bold text-blue-600">ELITEIIT Marketing Tools</h1>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">{user?.email}</span>
+              <span className="text-sm text-gray-600">{userEmail}</span>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"

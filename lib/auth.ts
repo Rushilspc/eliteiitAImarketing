@@ -1,24 +1,31 @@
-import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
+const VALID_EMAIL = 'eliteiit123@gmail.com'
+const VALID_PASSWORD = 'Elite1801@'
 
-export async function getServerSession() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+export function validateCredentials(email: string, password: string): boolean {
+  return email === VALID_EMAIL && password === VALID_PASSWORD
+}
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return null
+export function isAuthenticated(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem('isAuthenticated') === 'true'
+}
+
+export function setAuthenticated(value: boolean): void {
+  if (typeof window === 'undefined') return
+  if (value) {
+    localStorage.setItem('isAuthenticated', 'true')
+    localStorage.setItem('userEmail', VALID_EMAIL)
+  } else {
+    localStorage.removeItem('isAuthenticated')
+    localStorage.removeItem('userEmail')
   }
+}
 
-  const cookieStore = await cookies()
-  const authCookie = cookieStore.get('sb-access-token')
+export function getUserEmail(): string | null {
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem('userEmail')
+}
 
-  if (!authCookie) {
-    return null
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseAnonKey)
-  
-  const { data: { user } } = await supabase.auth.getUser(authCookie.value)
-  
-  return user
+export function logout(): void {
+  setAuthenticated(false)
 }

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import axios from 'axios'
-import { supabase } from '@/lib/supabase'
 
 export default function MessageCreator() {
   const [idea, setIdea] = useState('')
@@ -22,25 +21,9 @@ export default function MessageCreator() {
     setMessage('')
 
     try {
-      if (!supabase) {
-        setError('Application not configured. Please check environment variables.')
-        return
-      }
-
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        setError('Not authenticated. Please login again.')
-        return
-      }
-
       const response = await axios.post('/api/message', {
         promotionalIdea: idea,
         messageType: platform
-      }, {
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`
-        }
       })
 
       setMessage(response.data.message)
